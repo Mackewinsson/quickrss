@@ -48,7 +48,8 @@ const Navbar = () => {
           </ul>
         </div>
         <Link href={"/"} className="btn btn-ghost text-xl">
-          <Image src={logo} alt="logo wise-ass" width={40} /> WISE-ASS
+          {/* <Image src={logo} alt="logo wise-ass" width={40} /> Up-rss */}
+          Up-rss
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
