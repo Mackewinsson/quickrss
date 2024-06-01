@@ -3,7 +3,7 @@
 import User from "../../model/User";
 
 const { getSession } = require("@auth0/nextjs-auth0");
-// const { default: connectDB } = require("../../app/lib/connectDB");
+const { default: connectDB } = require("../../app/lib/connectDB");
 
 export default async function createUser() {
   try {
@@ -12,7 +12,7 @@ export default async function createUser() {
       throw new Error("User not found");
     }
 
-    // await connectDB(); // Connect to MongoDB
+    await connectDB(); // Connect to MongoDB
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email: user.email });
