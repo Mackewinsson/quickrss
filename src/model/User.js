@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const User = mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     name: String,
     age: Number,
@@ -13,10 +13,11 @@ const User = mongoose.Schema(
     email_verified: Boolean,
     sub: String,
     sid: String,
+    rssFeeds: [{ type: mongoose.Schema.Types.ObjectId, ref: "RSSFeed" }],
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.models.User || mongoose.model("User", User);
+export default mongoose.models.User || mongoose.model("User", UserSchema);
