@@ -16,7 +16,7 @@ export default async function createUser() {
 
     // Check if the user already exists
     let existingUser = await User.findOne({ email: user.email }).populate(
-      "rssFeed"
+      "rssFeeds"
     );
     if (existingUser) {
       console.log("User already exists:", existingUser);

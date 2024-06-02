@@ -7,7 +7,7 @@ import connectDB from "../app/lib/connectDB";
 
 const parser = new Parser();
 const CHECK_INTERVAL_MINUTES = 5;
-let task = null;
+let tasks = []; // Array to hold all cron tasks
 
 /**
  * Encuentra o crea un feed RSS para un usuario.
@@ -125,13 +125,11 @@ export const startRssSubscription = async (rssUrl, webhookUrl, userId) => {
       await initializeRSSFeedTimestamp(rssFeed, rssUrl);
     }
 
-    if (task) {
-      task.stop();
-    }
-
-    task = cron.schedule(`*/${CHECK_INTERVAL_MINUTES} * * * *`, () => {
+    const newTask = cron.schedule(`*/${CHECK_INTERVAL_MINUTES} * * * *`, () => {
       processRSSFeed(rssUrl, userId);
     });
+
+    tasks.push(newTask);
 
     console.log("RSS feed subscription started.");
   } catch (error) {
@@ -143,9 +141,23 @@ export const startRssSubscription = async (rssUrl, webhookUrl, userId) => {
  * Detiene la suscripción del feed RSS.
  */
 export const stopRSSFeedChecker = () => {
-  if (task) {
-    task.stop();
-    task = null;
-    console.log("RSS feed checker stopped.");
+  tasks.forEach((task) => task.stop());
+  tasks = [];
+  console.log("RSS feed checker stopped.");
+};
+
+/**
+ * Inicia las suscripciones de todos los feeds RSS almacenados en la base de datos.
+ */
+export const startAllRSSFeedSubscriptions = async () => {
+  try {
+    await connectDB();
+    const allFeeds = await RSSFeed.find();
+    allFeeds.forEach((feed) => {
+      startRssSubscription(feed.rssUrl, feed.webhookUrl, feed.user.toString());
+    });
+    console.log("All RSS feed subscriptions started.");
+  } catch (error) {
+    console.error("Error starting all RSS feed subscriptions:", error);
   }
 };
