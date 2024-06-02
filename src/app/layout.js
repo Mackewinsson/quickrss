@@ -6,7 +6,7 @@ import { startAllRSSFeedSubscriptions } from "../utils/rssChecker";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "uprss",
+  title: "quickrss",
   description: "",
 };
 startAllRSSFeedSubscriptions();
