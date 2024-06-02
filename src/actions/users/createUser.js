@@ -19,7 +19,7 @@ export default async function createUser() {
       "rssFeeds"
     );
     if (existingUser) {
-      console.log("User already exists:", existingUser);
+      console.log("User already exists");
       return existingUser; // Return the existing user
     }
 
