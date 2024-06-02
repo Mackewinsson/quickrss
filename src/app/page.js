@@ -1,11 +1,13 @@
-import { FormComponent } from "@component/FormComponent";
 import createUser from "../actions/users/createUser";
+import MainContent from "@component/MainContent";
 
 export default async function Home() {
-  createUser();
+  const user = createUser();
+  const hasRSSFeed = user?.rssFeed ? true : false;
+  console.log(hasRSSFeed);
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-40">
-      <FormComponent />
-    </main>
+    <div>
+      <MainContent />
+    </div>
   );
 }

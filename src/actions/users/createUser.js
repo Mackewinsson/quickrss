@@ -1,13 +1,13 @@
 "use server";
 
 import User from "../../model/User";
-
-const { getSession } = require("@auth0/nextjs-auth0");
-const { default: connectDB } = require("../../app/lib/connectDB");
+import { getSession } from "@auth0/nextjs-auth0";
+import connectDB from "../../app/lib/connectDB";
 
 export default async function createUser() {
   try {
-    const { user } = await getSession();
+    const session = await getSession();
+    const { user } = session;
     if (!user) {
       throw new Error("User not found");
     }
@@ -15,10 +15,12 @@ export default async function createUser() {
     await connectDB(); // Connect to MongoDB
 
     // Check if the user already exists
-    const existingUser = await User.findOne({ email: user.email });
+    let existingUser = await User.findOne({ email: user.email }).populate(
+      "rssFeed"
+    );
     if (existingUser) {
       console.log("User already exists:", existingUser);
-      return;
+      return existingUser; // Return the existing user
     }
 
     // Create a new user document
@@ -40,6 +42,7 @@ export default async function createUser() {
     await newUser.save();
 
     console.log("User created:", newUser);
+    return newUser; // Return the new user
   } catch (error) {
     console.error("Error creating user:", error);
   }

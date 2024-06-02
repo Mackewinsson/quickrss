@@ -1,6 +1,7 @@
 import Parser from "rss-parser";
 import cron from "node-cron";
 import RSSFeed from "../model/Rss";
+import User from "../model/User";
 import { sendToSlack } from "./slack";
 import connectDB from "../app/lib/connectDB";
 
@@ -23,6 +24,13 @@ const findOrCreateRSSFeed = async (rssUrl, userId, webhookUrl) => {
   if (!rssFeed) {
     rssFeed = new RSSFeed({ rssUrl, user: userId, webhookUrl });
     await rssFeed.save();
+
+    // Update the user's rssFeeds reference
+    const user = await User.findById(userId);
+    if (user) {
+      user.rssFeeds.push(rssFeed._id);
+      await user.save();
+    }
   } else if (rssFeed.webhookUrl !== webhookUrl) {
     rssFeed.webhookUrl = webhookUrl;
     await rssFeed.save();

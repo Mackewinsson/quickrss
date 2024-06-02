@@ -7,6 +7,7 @@ export function FormComponent() {
   const { user, error, isLoading } = useUser();
   const action = "start";
   const rssSubcriptionWithArgs = rssSubcription.bind(null, user, action);
+
   return (
     <form action={rssSubcriptionWithArgs} className="form-control w-full h-40">
       <div className="flex flex-col w-full">

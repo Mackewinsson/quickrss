@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema(
     email_verified: Boolean,
     sub: String,
     sid: String,
-    rssFeeds: [{ type: mongoose.Schema.Types.ObjectId, ref: "RSSFeed" }],
+    rssFeeds: [{ type: mongoose.Schema.Types.ObjectId, ref: "RSSFeed" }], // Reference to RSSFeed
   },
   {
     timestamps: true,
