@@ -22,9 +22,6 @@ async function connectDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
     };
 
     cached.promise = mongoose.connect(DATABASE_URL, opts).then((mongoose) => {
