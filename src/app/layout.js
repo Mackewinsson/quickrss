@@ -9,7 +9,7 @@ export const metadata = {
   title: "quickrss",
   description: "",
 };
-startAllRSSFeedSubscriptions();
+// startAllRSSFeedSubscriptions();
 
 export default function RootLayout({ children }) {
   return (

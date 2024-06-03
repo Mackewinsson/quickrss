@@ -1,13 +1,10 @@
 import Parser from "rss-parser";
-import cron from "node-cron";
 import RSSFeed from "../model/Rss";
 import User from "../model/User";
 import { sendToSlack } from "./slack";
 import connectDB from "../app/lib/connectDB";
 
 const parser = new Parser();
-const CHECK_INTERVAL_MINUTES = 5;
-let tasks = []; // Array to hold all cron tasks
 
 /**
  * Encuentra o crea un feed RSS para un usuario.
@@ -108,49 +105,27 @@ const processRSSFeed = async (rssUrl, userId) => {
  * @param {string} webhookUrl - La URL del Webhook de Slack.
  * @param {string} userId - El ID del usuario.
  */
-export const startRssSubscription = async (
-  rssUrl,
-  webhookUrl,
-  userId,
-  skipCheck = false
-) => {
+export const startRssSubscription = async (rssUrl, webhookUrl, userId) => {
   try {
     await connectDB();
 
-    // Verifica si el usuario ya tiene una suscripción, pero omite el chequeo si skipCheck es true
+    // Verifica si el usuario ya tiene una suscripción
     const existingFeed = await RSSFeed.findOne({ rssUrl, user: userId });
-    if (existingFeed && !skipCheck) {
+    if (existingFeed) {
       console.log("Subscription already exists for this user.");
       return;
     }
 
-    const rssFeed =
-      existingFeed || (await findOrCreateRSSFeed(rssUrl, userId, webhookUrl));
+    const rssFeed = await findOrCreateRSSFeed(rssUrl, userId, webhookUrl);
 
     if (!rssFeed.latestItemTimestamp) {
       await initializeRSSFeedTimestamp(rssFeed, rssUrl);
     }
 
-    const newTask = cron.schedule(`*/${CHECK_INTERVAL_MINUTES} * * * *`, () => {
-      console.log("CRON JOB EXECUTED for RSS URL:", rssUrl);
-      processRSSFeed(rssUrl, userId);
-    });
-
-    tasks.push(newTask);
-
     console.log("RSS feed subscription started for URL:", rssUrl);
   } catch (error) {
     console.error("Error starting RSS feed subscription:", error);
   }
-};
-
-/**
- * Detiene la suscripción del feed RSS.
- */
-export const stopRSSFeedChecker = () => {
-  tasks.forEach((task) => task.stop());
-  tasks = [];
-  console.log("RSS feed checker stopped.");
 };
 
 /**
@@ -162,12 +137,7 @@ export const startAllRSSFeedSubscriptions = async () => {
     const allFeeds = await RSSFeed.find();
     for (const feed of allFeeds) {
       console.log("Starting subscription for feed:", feed.rssUrl);
-      await startRssSubscription(
-        feed.rssUrl,
-        feed.webhookUrl,
-        feed.user.toString(),
-        true
-      );
+      await processRSSFeed(feed.rssUrl, feed.user.toString());
     }
     console.log("All RSS feed subscriptions started.");
   } catch (error) {
