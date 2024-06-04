@@ -5,12 +5,14 @@ import connectDB from "../../app/lib/connectDB";
 
 const { getSession } = require("@auth0/nextjs-auth0");
 
-export default async function createUser() {
+export async function createUser() {
   try {
-    const { user } = await getSession();
-    if (!user) {
-      throw new Error("User not found");
+    const session = await getSession();
+    if (!session || !session.user) {
+      throw new Error("User not found in session");
     }
+
+    const { user } = session;
 
     await connectDB(); // Connect to MongoDB
 
@@ -45,5 +47,6 @@ export default async function createUser() {
     return newUser;
   } catch (error) {
     console.error("Error creating user:", error);
+    return { error: error.message };
   }
 }

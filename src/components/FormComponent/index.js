@@ -1,15 +1,15 @@
 "use client";
 
 import { useUser } from "@auth0/nextjs-auth0/client";
-import rssSubcription from "../../actions/rss/rss";
+import rssSubscription from "../../actions/rss/rss";
 
 export function FormComponent() {
   const { user, error, isLoading } = useUser();
   const action = "start";
-  const rssSubcriptionWithArgs = rssSubcription.bind(null, user, action);
+  const rssSubscriptionWithArgs = rssSubscription.bind(null, user, action);
 
   return (
-    <form action={rssSubcriptionWithArgs} className="form-control w-full h-40">
+    <form action={rssSubscriptionWithArgs} className="form-control w-full h-40">
       <div className="flex flex-col w-full">
         <div className="grid h-40 card bg-base-300 rounded-box place-items-center">
           <div className="flex justify-around place-items-center w-full">
