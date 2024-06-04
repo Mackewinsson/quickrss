@@ -5,7 +5,7 @@ import User from "../../model/User";
 import addRSSFeed from "../../services/rss/addRssFeed";
 import { startRssSubscription } from "../../utils/rssChecker";
 
-export default async function rssSubcription(user, action, formData) {
+export default async function rssSubscription(user, action, formData) {
   await connectDB();
   const { sub } = user;
   const userM = await User.findOne({ sub });
