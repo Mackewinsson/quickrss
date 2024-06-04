@@ -1,5 +1,4 @@
 import Parser from "rss-parser";
-import RSSFeed from "../model/Rss";
 import User from "../model/User";
 import { sendToSlack } from "./slack";
 import connectDB from "../app/lib/connectDB";
@@ -16,21 +15,24 @@ const parser = new Parser();
 const findOrCreateRSSFeed = async (rssUrl, userId, webhookUrl) => {
   await connectDB();
 
-  let rssFeed = await RSSFeed.findOne({ rssUrl, user: userId });
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  let rssFeed = user.rssFeeds.find((feed) => feed.rssUrl === rssUrl);
 
   if (!rssFeed) {
-    rssFeed = new RSSFeed({ rssUrl, user: userId, webhookUrl });
-    await rssFeed.save();
-
-    // Update the user's rssFeeds reference
-    const user = await User.findById(userId);
-    if (user) {
-      user.rssFeeds.push(rssFeed._id);
-      await user.save();
-    }
+    rssFeed = {
+      rssUrl,
+      webhookUrl,
+      latestItemTimestamp: null,
+    };
+    user.rssFeeds.push(rssFeed);
+    await user.save();
   } else if (rssFeed.webhookUrl !== webhookUrl) {
     rssFeed.webhookUrl = webhookUrl;
-    await rssFeed.save();
+    await user.save();
   }
 
   return rssFeed;
@@ -40,13 +42,14 @@ const findOrCreateRSSFeed = async (rssUrl, userId, webhookUrl) => {
  * Inicializa el timestamp del feed RSS con el ítem más reciente.
  * @param {Object} rssFeed - El documento del feed RSS.
  * @param {string} rssUrl - La URL del feed RSS.
+ * @param {Object} user - El documento del usuario.
  */
-const initializeRSSFeedTimestamp = async (rssFeed, rssUrl) => {
+const initializeRSSFeedTimestamp = async (rssFeed, rssUrl, user) => {
   const feed = await parser.parseURL(rssUrl);
 
   if (feed && feed.items && feed.items.length > 0) {
     rssFeed.latestItemTimestamp = new Date(feed.items[0].pubDate).getTime();
-    await rssFeed.save();
+    await user.save();
     console.log(
       "Initialized latestItemTimestamp to",
       rssFeed.latestItemTimestamp
@@ -63,7 +66,8 @@ const initializeRSSFeedTimestamp = async (rssFeed, rssUrl) => {
  */
 const processRSSFeed = async (rssUrl, userId) => {
   await connectDB();
-  const rssFeed = await RSSFeed.findOne({ rssUrl, user: userId });
+  const user = await User.findById(userId);
+  const rssFeed = user.rssFeeds.find((feed) => feed.rssUrl === rssUrl);
 
   if (!rssFeed) {
     console.error("RSS feed not found for URL:", rssUrl);
@@ -91,7 +95,7 @@ const processRSSFeed = async (rssUrl, userId) => {
 
     if (newLatestTimestamp > rssFeed.latestItemTimestamp) {
       rssFeed.latestItemTimestamp = newLatestTimestamp;
-      await rssFeed.save();
+      await user.save();
       console.log("Updated latestItemTimestamp to", newLatestTimestamp);
     }
   } catch (error) {
@@ -109,17 +113,22 @@ export const startRssSubscription = async (rssUrl, webhookUrl, userId) => {
   try {
     await connectDB();
 
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
     // Verifica si el usuario ya tiene una suscripción
-    const existingFeed = await RSSFeed.findOne({ rssUrl, user: userId });
-    if (existingFeed) {
+    let rssFeed = user.rssFeeds.find((feed) => feed.rssUrl === rssUrl);
+    if (rssFeed) {
       console.log("Subscription already exists for this user.");
       return;
     }
 
-    const rssFeed = await findOrCreateRSSFeed(rssUrl, userId, webhookUrl);
+    rssFeed = await findOrCreateRSSFeed(rssUrl, userId, webhookUrl);
 
     if (!rssFeed.latestItemTimestamp) {
-      await initializeRSSFeedTimestamp(rssFeed, rssUrl);
+      await initializeRSSFeedTimestamp(rssFeed, rssUrl, user);
     }
 
     console.log("RSS feed subscription started for URL:", rssUrl);
@@ -134,10 +143,12 @@ export const startRssSubscription = async (rssUrl, webhookUrl, userId) => {
 export const startAllRSSFeedSubscriptions = async () => {
   try {
     await connectDB();
-    const allFeeds = await RSSFeed.find();
-    for (const feed of allFeeds) {
-      console.log("Starting subscription for feed:", feed.rssUrl);
-      await processRSSFeed(feed.rssUrl, feed.user.toString());
+    const users = await User.find();
+    for (const user of users) {
+      for (const feed of user.rssFeeds) {
+        console.log("Starting subscription for feed:", feed.rssUrl);
+        await processRSSFeed(feed.rssUrl, user._id);
+      }
     }
     console.log("All RSS feed subscriptions started.");
   } catch (error) {

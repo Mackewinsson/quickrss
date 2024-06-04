@@ -4,7 +4,8 @@ import { FormComponent } from "@component/FormComponent";
 import Loader from "@component/Loader";
 import React from "react";
 
-const MainContent = () => {
+const MainContent = ({ rssFeeds }) => {
+  console.log(rssFeeds);
   const { user, isLoading, error } = useUser();
 
   if (isLoading) {

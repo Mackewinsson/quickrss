@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
+const RSSFeedSchema = new mongoose.Schema(
+  {
+    rssUrl: { type: String, required: true },
+    webhookUrl: { type: String, required: true },
+    latestItemTimestamp: { type: Number, default: null },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const UserSchema = new mongoose.Schema(
   {
     name: String,
@@ -13,7 +24,7 @@ const UserSchema = new mongoose.Schema(
     email_verified: Boolean,
     sub: String,
     sid: String,
-    rssFeeds: [{ type: mongoose.Schema.Types.ObjectId, ref: "RSSFeed" }], // Reference to RSSFeed
+    rssFeeds: [RSSFeedSchema], // Embedded array of RSS feeds
   },
   {
     timestamps: true,
