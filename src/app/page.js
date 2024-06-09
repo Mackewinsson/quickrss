@@ -4,6 +4,10 @@ import MainContent from "@component/MainContent";
 
 export default async function Home() {
   const user = await createUser();
-  console.log(user);
-  return user ? <MainContent /> : <LandingPage />;
+  const serializedRssFeeds =
+    {
+      rssUrl: user.rssFeeds[0]?.rssUrl,
+      webhookUrl: user.rssFeeds[0]?.webhookUrl,
+    } || {};
+  return user ? <MainContent rssFeeds={serializedRssFeeds} /> : <LandingPage />;
 }
