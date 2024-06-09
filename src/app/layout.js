@@ -12,11 +12,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="dracula">
+    <html lang="en" data-theme="dracula" className="h-full">
       <UserProvider>
-        <body className={inter.className}>
+        <body className={`${inter.className} h-full`}>
           <Navbar />
-          {children}
+          <main className="container mx-auto px-4 py-8 bg-slate-100 h-full justify-center">
+            {children}
+          </main>
         </body>
       </UserProvider>
     </html>

@@ -15,7 +15,7 @@ export default async function createUser() {
     await connectDB(); // Connect to MongoDB
 
     // Check if the user already exists
-    let existingUser = await User.findOne({ email: user.email });
+    let existingUser = await User.findOne({ email: user.email }).lean();
     if (existingUser) {
       console.log("User already exists");
       return existingUser;
@@ -42,7 +42,7 @@ export default async function createUser() {
 
     console.log("User created:", newUser);
 
-    return newUser;
+    return newUser.toObject();
   } catch (error) {
     console.error("Error creating user:", error);
   }
