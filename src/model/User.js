@@ -4,6 +4,7 @@ const RSSFeedSchema = new mongoose.Schema(
   {
     rssUrl: { type: String, required: true },
     webhookUrl: { type: String, required: true },
+    latestItemTimestamp: { type: Number, required: true, default: null },
   },
   {
     timestamps: true,

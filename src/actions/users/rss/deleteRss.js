@@ -14,18 +14,8 @@ export default async function deleteRss(rssUrl) {
       throw new Error("User not found");
     }
 
-    // Find the index of the RSS feed to be removed
-    const rssFeedIndex = fetchedUser.rssFeeds.findIndex(
-      (feed) => feed.rssUrl === rssUrl
-    );
-    console.log(rssFeedIndex);
-    if (rssFeedIndex === -1) {
-      throw new Error("RSS feed not found");
-    }
-
     // Remove the RSS feed from the array
-    fetchedUser.rssFeeds.splice(rssFeedIndex, 1);
-
+    fetchedUser.rssFeed = undefined;
     // Save the updated user document
     await fetchedUser.save();
 

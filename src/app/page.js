@@ -4,10 +4,20 @@ import MainContent from "@component/MainContent";
 
 export default async function Home() {
   const user = await createUser();
-  const serializedRssFeeds =
-    {
-      rssUrl: user?.rssFeeds[0]?.rssUrl,
-      webhookUrl: user?.rssFeeds[0]?.webhookUrl,
-    } || {};
-  return user ? <MainContent rssFeeds={serializedRssFeeds} /> : <LandingPage />;
+  const serializedRssFeeds = () => {
+    if (user.rssFeed) {
+      return {
+        rssUrl: user.rssFeed.rssUrl,
+        webhookUrl: user.rssFeed.webhookUrl,
+      };
+    } else {
+      null;
+    }
+  };
+
+  return user ? (
+    <MainContent rssFeed={serializedRssFeeds()} />
+  ) : (
+    <LandingPage />
+  );
 }
