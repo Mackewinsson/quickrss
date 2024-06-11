@@ -6,8 +6,8 @@ export default async function Home() {
   const user = await createUser();
   const serializedRssFeeds =
     {
-      rssUrl: user.rssFeeds[0]?.rssUrl,
-      webhookUrl: user.rssFeeds[0]?.webhookUrl,
+      rssUrl: user?.rssFeeds[0]?.rssUrl,
+      webhookUrl: user?.rssFeeds[0]?.webhookUrl,
     } || {};
   return user ? <MainContent rssFeeds={serializedRssFeeds} /> : <LandingPage />;
 }
