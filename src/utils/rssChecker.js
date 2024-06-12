@@ -57,6 +57,7 @@ export const startAllRSSFeedSubscriptions = async () => {
       }
     }
     console.log(`${users.length} rss feeds checked`);
+    return { users: users.length };
   } catch (error) {
     console.error("Error RSS feed subscriptions:", error);
   }

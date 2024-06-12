@@ -9,10 +9,10 @@ export async function GET(req) {
     return new Response("Unauthorized", { status: 401 });
   }
   try {
-    await startAllRSSFeedSubscriptions();
+    const response = await startAllRSSFeedSubscriptions();
     return NextResponse.json({
       ok: true,
-      message: `RSS feed check completed`,
+      message: `${response.users} RSS feed check completed`,
     });
   } catch (error) {
     console.error("Error checking RSS feeds:", error);
