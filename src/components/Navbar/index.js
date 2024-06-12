@@ -49,7 +49,7 @@ const Navbar = () => {
         </div>
         <Link href={"/"} className="btn btn-ghost text-xl">
           {/* <Image src={logo} alt="logo wise-ass" width={40} /> Up-rss */}
-          Quickrss
+          quickRSS
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">

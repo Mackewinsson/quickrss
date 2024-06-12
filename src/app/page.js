@@ -9,6 +9,7 @@ export default async function Home() {
       return {
         rssUrl: user.rssFeed.rssUrl,
         webhookUrl: user.rssFeed.webhookUrl,
+        latestItemTimestamp: user.rssFeed.latestItemTimestamp,
       };
     } else {
       null;
