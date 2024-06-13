@@ -1,8 +1,6 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import logo from "@img/logo.png";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 const Navbar = () => {
@@ -36,11 +34,11 @@ const Navbar = () => {
               <ul className="p-2">
                 {user ? (
                   <li>
-                    <Link href={"/api/auth/logout"}>Cerrar Sesion</Link>
+                    <Link href={"/api/auth/logout"}>Log Out</Link>
                   </li>
                 ) : (
                   <li>
-                    <Link href={"/api/auth/login"}>Iniciar Sesion</Link>
+                    <Link href={"/api/auth/login"}>Log In or Register</Link>
                   </li>
                 )}
               </ul>
@@ -48,12 +46,14 @@ const Navbar = () => {
           </ul>
         </div>
         <Link href={"/"} className="btn btn-ghost text-xl">
-          {/* <Image src={logo} alt="logo wise-ass" width={40} /> Up-rss */}
-          quickRSS
+          <div className="font-bold text-2xl text-[#494949] relative">
+            quick<span className="text-[#6fda44]">RSS</span>
+            <div className="absolute bottom-0 left-0 h-1 w-full bg-[#6fda44] opacity-75"></div>
+          </div>
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        {user && <div>Hola 👋 {user.name}</div>}
+        {user && <div>Hello 👋 {user.name}</div>}
         <ul className="menu menu-horizontal px-1">
           <li>
             <details>
@@ -61,11 +61,11 @@ const Navbar = () => {
               <ul className="p-2">
                 {user ? (
                   <li>
-                    <Link href={"/api/auth/logout"}>Cerrar Sesion</Link>
+                    <Link href={"/api/auth/logout"}>Log Out</Link>
                   </li>
                 ) : (
                   <li>
-                    <Link href={"/api/auth/login"}>Iniciar Sesion</Link>
+                    <Link href={"/api/auth/login"}>Log In</Link>
                   </li>
                 )}
               </ul>

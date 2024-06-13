@@ -16,7 +16,17 @@ module.exports = {
     },
   },
   daisyui: {
-    theme: ["dracula"],
+    themes: [
+      {
+        mytheme: {
+          primary: "#6fda44",
+          secondary: "#494949",
+          accent: "#37cdbe",
+          neutral: "#3d4451",
+          "base-100": "#ffffff",
+        },
+      },
+    ],
   },
   plugins: [daisyui],
 };
