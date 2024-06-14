@@ -1,12 +1,11 @@
 "use client";
 
-import { useUser } from "@auth0/nextjs-auth0/client";
-import rssSubcription from "../../actions/rss/rss";
+import Link from "next/link";
 import createRss from "../../actions/users/rss/createRss";
 
 export function FormComponent() {
   return (
-    <form action={createRss} className="form-control w-full h-40">
+    <form className="form-control w-full h-40">
       <div className="flex flex-col w-full">
         <div className="grid h-40 card bg-base-300 rounded-box place-items-center">
           <div className="flex justify-around place-items-center w-full">
@@ -33,9 +32,11 @@ export function FormComponent() {
         </div>
         <div className="divider"></div>
         <div className="grid h-20 card bg-base-300 rounded-box place-items-center">
-          <button className="btn btn-wide btn-primary" type="submit">
-            Button
-          </button>
+          <Link href="/payment">
+            <button className="btn btn-wide btn-primary" type="submit">
+              Button
+            </button>
+          </Link>
         </div>
       </div>
     </form>
