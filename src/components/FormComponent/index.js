@@ -34,7 +34,7 @@ export function FormComponent() {
         <div className="grid h-20 card bg-base-300 rounded-box place-items-center">
           <Link href="/payment">
             <button className="btn btn-wide btn-primary" type="submit">
-              Button
+              Comenzar
             </button>
           </Link>
         </div>
