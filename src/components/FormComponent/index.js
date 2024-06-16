@@ -30,8 +30,7 @@ export function FormComponent() {
             </div>
           </div>
         </div>
-        <div className="divider"></div>
-        <div className="grid h-20 card bg-base-300 rounded-box place-items-center">
+        <div className="grid h-20 card place-items-center">
           <Link href="/payment">
             <button className="btn btn-wide btn-primary" type="submit">
               Comenzar
