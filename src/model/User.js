@@ -25,6 +25,11 @@ const UserSchema = new mongoose.Schema(
     sub: String,
     sid: String,
     rssFeed: RSSFeedSchema, // Embedded array of RSS feeds
+    subscriptionType: {
+      type: String,
+      enum: ["free", "pro"],
+      default: "free",
+    },
   },
   {
     timestamps: true,

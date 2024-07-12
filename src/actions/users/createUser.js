@@ -35,6 +35,7 @@ export default async function createUser() {
       sub: user.sub,
       sid: user.sid,
       rssFeeds: [], // Initialize with an empty array
+      subscriptionType: "free",
     });
 
     // Save the new user to the database

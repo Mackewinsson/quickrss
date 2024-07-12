@@ -25,6 +25,5 @@ export async function POST(request) {
     mode: "subscription",
     success_url: `${process.env.AUTH0_BASE_URL}/success`,
   });
-  console.log(session);
   return NextResponse.json(session);
 }

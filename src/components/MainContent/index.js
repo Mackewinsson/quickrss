@@ -3,6 +3,7 @@ import React from "react";
 import { FormComponent } from "@component/FormComponent";
 import deleteRss from "../../actions/users/rss/deleteRss";
 import RssFeedTable from "@component/RssFeedTable";
+import Link from "next/link";
 
 export function MainContent({ rssFeed }) {
   const handleModal = async () => {
@@ -22,6 +23,11 @@ export function MainContent({ rssFeed }) {
         <div className="w-full">
           <RssFeedTable rssFeed={rssFeed} handleModal={handleModal} />
           <div className="flex justify-center gap-2 mt-5">
+            <Link href="/payment" passHref>
+              <button className="btn btn-primary">
+                Add more RSS - Upgrade to Pro 🚀
+              </button>
+            </Link>
             <button className="btn btn-error" onClick={handleModal}>
               Delete
             </button>

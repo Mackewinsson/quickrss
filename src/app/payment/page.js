@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
-
+import Link from "next/link";
+import React from "react";
 const plans = [
   {
+    id: 0,
     name: "Free 🌟",
     price: "$0",
     description: "Start for Free",
@@ -11,9 +12,10 @@ const plans = [
       "🔔 Receive Notifications Every 30 Minutes",
       "💬 Basic Support",
     ],
-    buttonLabel: "Get Started",
+    buttonLabel: "Current Plan",
   },
   {
+    id: 1,
     name: "Pro 🚀",
     price: "$5",
     description: "/ month",
@@ -30,6 +32,7 @@ const plans = [
 
 export default function Payment() {
   const handleSelectPlan = async (plan) => {
+    return;
     const response = await fetch("/api/checkout", {
       method: "POST",
       body: JSON.stringify(plan),
@@ -37,8 +40,8 @@ export default function Payment() {
         "Content-Type": "application/json",
       },
     });
+
     const session = await response.json();
-    console.log(session);
     // Redirect to the checkout session (Stripe)
     window.location.href = session.url;
   };
@@ -64,12 +67,20 @@ export default function Payment() {
                 )}
               </div>
               <div className="card-actions justify-center mt-4">
-                <button
-                  className={`btn btn-primary`}
-                  onClick={() => handleSelectPlan(plan)}
-                >
-                  {plan.buttonLabel}
-                </button>
+                {plan.id === 0 ? (
+                  <Link href="/" passHref>
+                    <button className={`btn btn-primary`}>
+                      {plan.buttonLabel}
+                    </button>
+                  </Link>
+                ) : (
+                  <button
+                    className={`btn btn-primary`}
+                    onClick={() => handleSelectPlan(plan)}
+                  >
+                    {plan.buttonLabel}
+                  </button>
+                )}
               </div>
             </div>
           </div>
