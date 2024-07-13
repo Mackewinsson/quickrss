@@ -1,6 +1,6 @@
 import React from "react";
 
-const RssFeedTable = ({ rssFeed, handleModal }) => {
+const RssFeedTable = ({ rssFeed }) => {
   const truncate = (str, n) => {
     return str.length > n ? str.substring(0, n - 1) + "..." : str;
   };

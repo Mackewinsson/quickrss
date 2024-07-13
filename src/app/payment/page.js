@@ -26,7 +26,7 @@ const plans = [
       "🌟 Priority Customer Support",
     ],
     billingInfo: "*Billed as $60 yearly",
-    buttonLabel: "Get Started",
+    buttonLabel: "Coming Soon",
   },
 ];
 
