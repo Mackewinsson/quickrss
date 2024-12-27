@@ -34,7 +34,6 @@ export default async function createUser() {
       email_verified: user.email_verified,
       sub: user.sub,
       sid: user.sid,
-      rssFeeds: [], // Initialize with an empty array
       subscriptionType: "free",
     });
 

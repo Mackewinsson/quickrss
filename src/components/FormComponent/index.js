@@ -1,19 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import createRss from "../../actions/users/rss/createRss";
+import createTask from "../../actions/users/rss/createTask";
 
 export function FormComponent() {
+
+
   return (
-    <form className="form-control w-full h-40" action={createRss}>
+    <form className="form-control w-full h-40" action={createTask}>
       <div className="flex flex-col w-full">
         <div className="grid h-40 card bg-base-300 rounded-box place-items-center">
           <div className="flex justify-around place-items-center w-full">
             <div className="flex flex-col w-1/3 m-4">
-              <label className="p-2">RSS URL</label>
+              <label className="p-2">Upwork URL</label>
               <input
                 type="text"
-                name="rssUrl"
+                name="taskUrl"
                 placeholder="Type here"
                 className="input input-bordered w-full max-w-xl"
               />
