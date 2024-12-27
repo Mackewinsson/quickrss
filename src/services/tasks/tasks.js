@@ -58,7 +58,6 @@ export const updateTask = async (userId, taskId, updates) => {
  * @returns {Promise<Object>} - The response message
  */
 export const deleteTask = async (userId, taskId) => {
-    console.log(taskId)
     try {
         const response = await axios.delete(`${API_BASE_URL}/users/${userId}/tasks/${taskId}`);
         return response.data; // Return the success message

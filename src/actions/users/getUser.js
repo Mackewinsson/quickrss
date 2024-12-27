@@ -8,7 +8,7 @@ export default async function getUser() {
   try {
     const { user } = await getSession();
     await connectDB(); // Connect to MongoDB
-    const fetchedUser = await User.findOne({ email: user.email });
+    const fetchedUser = await User.findOne({ email: user.email }).lean(); // Use `.lean()` to return a plain object
     return fetchedUser;
   } catch (error) {
     console.error("Error fetxching user:", error);
