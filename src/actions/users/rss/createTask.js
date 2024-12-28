@@ -1,9 +1,7 @@
 "use server";
 
-import { getSession } from "@auth0/nextjs-auth0";
 import { createTask as createTaskService } from "../../../services/tasks/tasks";
 import getUser from "../getUser";
-import {revalidatePath} from "next/cache";
 
 export default async function createTask(formData) {
   const taskUrl = formData.get("taskUrl");

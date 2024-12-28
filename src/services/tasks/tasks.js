@@ -1,5 +1,6 @@
 'use server'
 import axios from "axios";
+import axiosClient from "../../lib/axios/axiosClient";
 
 const API_BASE_URL = process.env.API_BASE_URL;
 
@@ -11,7 +12,7 @@ const API_BASE_URL = process.env.API_BASE_URL;
  */
 export const createTask = async (userId, taskData) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/users/${userId}/tasks`, taskData);
+        const response = await axiosClient.post(`/users/${userId}/tasks`, taskData);
         return response.data; // Return the created task
     } catch (error) {
         console.error("Error creating task:", error.response?.data || error.message);
@@ -26,7 +27,7 @@ export const createTask = async (userId, taskData) => {
  */
 export const fetchTasks = async (userId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/users/${encodeURIComponent(userId)}/tasks`);
+        const response = await axiosClient.get(`${API_BASE_URL}/users/${encodeURIComponent(userId)}/tasks`);
         return response.data.tasks; // Return the list of tasks
     } catch (error) {
         console.error("Error fetching tasks:", error.response?.data || error.message);
@@ -43,7 +44,7 @@ export const fetchTasks = async (userId) => {
  */
 export const updateTask = async (userId, taskId, updates) => {
     try {
-        const response = await axios.put(`${API_BASE_URL}/users/${encodeURIComponent(userId)}/tasks/${taskId}`, updates);
+        const response = await axiosClient.put(`${API_BASE_URL}/users/${encodeURIComponent(userId)}/tasks/${taskId}`, updates);
         return response.data.task; // Return the updated task
     } catch (error) {
         console.error("Error updating task:", error.response?.data || error.message);
@@ -59,7 +60,7 @@ export const updateTask = async (userId, taskId, updates) => {
  */
 export const deleteTask = async (userId, taskId) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/users/${userId}/tasks/${taskId}`);
+        const response = await axiosClient.delete(`${API_BASE_URL}/users/${userId}/tasks/${taskId}`);
         return response.data; // Return the success message
     } catch (error) {
         console.error("Error deleting task:", error.response?.data || error.message);
